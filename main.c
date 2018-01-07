@@ -14,7 +14,6 @@
 int Fsize=50;
 int cases=10;
 
-
 int i;
 int j;
 
@@ -29,8 +28,6 @@ struct tableau {
     struct tableau *right;
     struct tableau *parent;
 }*tab, *node, *node1, *kid, *pa;
-
-
 
 /*put all your functions here.  You will need
  1.
@@ -74,7 +71,6 @@ int findBC(char *g)
     return 0;
 }
 
-
 int parse(char *g)
 {
 /* return 1 if proposition, 2 if negation, 3 if binary, ow 0*/
@@ -115,17 +111,13 @@ int parse(char *g)
         
         if(parse(formulaOne) > 0 && parse(formulaTwo) > 0)
             return 3;
-        
     }
-
     return 0;
 }
-
 
 void complete(struct tableau *t){
 
 }
-
 
 int closed(struct tableau *t){
     // if a branch contains both p/q/r and -p/-q/-r then returns ture
@@ -134,7 +126,6 @@ int closed(struct tableau *t){
     char ***allBranch = findAllPaths(t,branch,0);
     return allContainContradiction(allBranch);
 }
-
 
 char*** findAllPaths(struct tableau *t, char *branch[], int pathLength){
     if (t == NULL)
@@ -160,7 +151,6 @@ char*** findAllPaths(struct tableau *t, char *branch[], int pathLength){
     }
 }
 
-
 int countLeaves(struct tableau *t){
     if(t == NULL)
         return 0;
@@ -170,7 +160,6 @@ int countLeaves(struct tableau *t){
         return countLeaves(t->left) + countLeaves(t->right);
 }
 
-
 int allContainContradiction(char ***branch){ //max 10 branches approx
     int noOfBranches = sizeof(branch) / sizeof(**branch);
     for (int a = 0 ; a < noOfBranches ; a ++){
@@ -179,7 +168,6 @@ int allContainContradiction(char ***branch){ //max 10 branches approx
     }
     return 1;
 }
-
 
 int containContradiction(char *branch[]){
     int nodesInBranch = sizeof(branch) / sizeof(branch[0]);
