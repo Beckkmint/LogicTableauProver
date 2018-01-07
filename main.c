@@ -17,6 +17,8 @@ int cases=10;
 int i;
 int j;
 
+int splitFinished = 0;
+
 int leaf = 0;
 char ***allBranches[10][20];
 
@@ -116,7 +118,74 @@ int parse(char *g)
 }
 
 void complete(struct tableau *t){
+    simplify(t->root);
+    
+}
 
+/*simplify 逻辑
+    if binary && binary connective is ->{
+        change it to v;
+        negate first formula;
+        simplify(new char);
+    }
+    if negation{
+        if 去掉negation is propositional
+            finish;
+        else if 去掉negation is negation
+            delete 2 negation;
+            simplify(new char);
+        else
+            去掉第一个negation;
+            negate both formula;
+            reverse binary connective;
+            simplify(new char);
+        }
+    else return;
+ */
+
+void simplify(char *root){
+    if (parse(root) == 3 && root[findBC(root)] == '>'){
+        root[findBC(root)] = 'v';
+        insert(root,"-",1);
+        simplify(root);
+    }
+    if (parse(root) == 2){
+        if (parse(root + 1) == 1) //proposition
+            return;
+        else if (parse(root + 1) == 2){ //negation
+            root = root + 2;
+            simplify(root);
+        }
+        else{ //binary
+            root = root + 1;
+            insert(root,"-",1);
+            insert(root,"-",findBC(root) + 1);
+            reverseBC(root);
+            simplify(root);
+        }
+    }
+}
+
+void insert(char *s1,char *s2,int f)
+{
+    int i,j;
+    char t;
+    for(i=f,j=0;s2[j];i++,j++)
+    {
+        t=s1[i];
+        s1[i]=s2[j];
+        s2[j]=t;
+    }
+    for(j=0;s2[j];j++,i++)
+        s1[i]=s2[j];
+    s1[i]='\0';
+}
+
+void reverseBC(char *root){
+    if (root[findBC(root)] == 'v')
+        root[findBC(root)] = '^';
+    else
+        root[findBC(root)] = 'v';
 }
 
 int closed(struct tableau *t){
